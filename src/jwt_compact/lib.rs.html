@@ -1,0 +1,439 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../jwt_compact/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! Minimalistic [JSON web token (JWT)][JWT] implementation with focus on type safety</span>
+<span class="doccomment">//! and secure cryptographic primitives.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Design choices</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - JWT signature algorithms (i.e., cryptographic algorithms providing JWT integrity)</span>
+<span class="doccomment">//!   are expressed via the [`Algorithm`] trait, which uses fully typed keys and signatures.</span>
+<span class="doccomment">//! - [JWT header] is represented by the [`Header`] struct. Notably, `Header` does not</span>
+<span class="doccomment">//!   expose the [`alg` field].</span>
+<span class="doccomment">//!   Instead, `alg` is filled automatically during token creation, and is compared to the</span>
+<span class="doccomment">//!   expected value during verification. (If you do not know the JWT signature algorithm during</span>
+<span class="doccomment">//!   verification, you&#39;re doing something wrong.) This eliminates the possibility</span>
+<span class="doccomment">//!   of [algorithm switching attacks][switching].</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Additional features</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - The crate supports more compact [CBOR] encoding of the claims. The compactly encoded JWTs</span>
+<span class="doccomment">//!   have [`cty` field] (content type) in their header set to `&quot;CBOR&quot;`.</span>
+<span class="doccomment">//! - The crate supports `EdDSA` algorithm with the Ed25519 elliptic curve, and `ES256K` algorithm</span>
+<span class="doccomment">//!   with the secp256k1 elliptic curve.</span>
+<span class="doccomment">//! - Supports basic [JSON Web Key](https://tools.ietf.org/html/rfc7517.html) functionality,</span>
+<span class="doccomment">//!   e.g., for converting keys to / from JSON or computing</span>
+<span class="doccomment">//!   [a key thumbprint](https://tools.ietf.org/html/rfc7638).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Supported algorithms</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! | Algorithm(s) | Feature | Description |</span>
+<span class="doccomment">//! |--------------|---------|-------------|</span>
+<span class="doccomment">//! | `HS256`, `HS384`, `HS512` | - | Uses pure Rust [`sha2`] crate |</span>
+<span class="doccomment">//! | `EdDSA` (Ed25519) | [`exonum-crypto`] | [`libsodium`] binding |</span>
+<span class="doccomment">//! | `EdDSA` (Ed25519) | [`ed25519-dalek`] | Pure Rust implementation |</span>
+<span class="doccomment">//! | `EdDSA` (Ed25519) | [`ed25519-compact`] | Compact pure Rust implementation, WASM-compatible |</span>
+<span class="doccomment">//! | `ES256K` | `es256k` | [Rust binding][`secp256k1`] for [`libsecp256k1`] |</span>
+<span class="doccomment">//! | `ES256K` | [`k256`] | Pure Rust implementation |</span>
+<span class="doccomment">//! | `RS*`, `PS*` (RSA) | [`rsa`] | Uses pure Rust [`rsa`] crate with blinding |</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! `EdDSA` and `ES256K` algorithms are somewhat less frequently supported by JWT implementations</span>
+<span class="doccomment">//! than others since they are recent additions to the JSON Web Algorithms (JWA) suit.</span>
+<span class="doccomment">//! They both work with elliptic curves</span>
+<span class="doccomment">//! (Curve25519 and secp256k1; both are widely used in crypto community and believed to be</span>
+<span class="doccomment">//! securely generated). These algs have 128-bit security, making them an alternative</span>
+<span class="doccomment">//! to `ES256`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # `no_std` support</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The crate supports a `no_std` compilation mode. This is controlled by two features:</span>
+<span class="doccomment">//! `clock` and `std`; both are on by default.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - The `clock` feature enables getting the current time using `Utc::now()` from [`chrono`].</span>
+<span class="doccomment">//!   Without it, some [`TimeOptions`] constructors, such as the `Default` impl,</span>
+<span class="doccomment">//!   are not available. It is still possible to create `TimeOptions` with an excplicitly specified</span>
+<span class="doccomment">//!   clock function, or to set / verify time-related [`Claims`] fields manually.</span>
+<span class="doccomment">//! - The `std` feature is propagated to the core dependencies and enables `std`-specific</span>
+<span class="doccomment">//!   functionality (such as error types implementing the standard `Error` trait).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Some `alloc` types are still used in the `no_std` mode, such as `String`, `Vec` and `Cow`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Note that not all crypto backends are `no_std`-compatible.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [JWT]: https://jwt.io/</span>
+<span class="doccomment">//! [switching]: https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/</span>
+<span class="doccomment">//! [JWT header]: https://tools.ietf.org/html/rfc7519#section-5</span>
+<span class="doccomment">//! [`alg` field]: https://tools.ietf.org/html/rfc7515#section-4.1.1</span>
+<span class="doccomment">//! [`cty` field]: https://tools.ietf.org/html/rfc7515#section-4.1.10</span>
+<span class="doccomment">//! [CBOR]: https://tools.ietf.org/html/rfc7049</span>
+<span class="doccomment">//! [`sha2`]: https://docs.rs/sha2/</span>
+<span class="doccomment">//! [`libsodium`]: https://download.libsodium.org/doc/</span>
+<span class="doccomment">//! [`exonum-crypto`]: https://docs.rs/exonum-crypto/</span>
+<span class="doccomment">//! [`ed25519-dalek`]: https://doc.dalek.rs/ed25519_dalek/</span>
+<span class="doccomment">//! [`ed25519-compact`]: https://crates.io/crates/ed25519-compact</span>
+<span class="doccomment">//! [`secp256k1`]: https://docs.rs/secp256k1/</span>
+<span class="doccomment">//! [`libsecp256k1`]: https://github.com/bitcoin-core/secp256k1</span>
+<span class="doccomment">//! [`k256`]: https://docs.rs/k256/</span>
+<span class="doccomment">//! [`rsa`]: https://docs.rs/rsa/</span>
+<span class="doccomment">//! [`chrono`]: https://docs.rs/chrono/</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Basic JWT lifecycle:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! use chrono::{Duration, Utc};</span>
+<span class="doccomment">//! use jwt_compact::{prelude::*, alg::{Hs256, Hs256Key}};</span>
+<span class="doccomment">//! use serde::{Serialize, Deserialize};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! /// Custom claims encoded in the token.</span>
+<span class="doccomment">//! #[derive(Debug, PartialEq, Serialize, Deserialize)]</span>
+<span class="doccomment">//! struct CustomClaims {</span>
+<span class="doccomment">//!     /// `sub` is a standard claim which denotes claim subject:</span>
+<span class="doccomment">//!     /// https://tools.ietf.org/html/rfc7519#section-4.1.2</span>
+<span class="doccomment">//!     #[serde(rename = &quot;sub&quot;)]</span>
+<span class="doccomment">//!     subject: String,</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # fn main() -&gt; anyhow::Result&lt;()&gt; {</span>
+<span class="doccomment">//! // Choose time-related options for token creation / validation.</span>
+<span class="doccomment">//! let time_options = TimeOptions::default();</span>
+<span class="doccomment">//! // Create a symmetric HMAC key, which will be used both to create and verify tokens.</span>
+<span class="doccomment">//! let key = Hs256Key::new(b&quot;super_secret_key_donut_steel&quot;);</span>
+<span class="doccomment">//! // Create a token.</span>
+<span class="doccomment">//! let header = Header::default().with_key_id(&quot;my-key&quot;);</span>
+<span class="doccomment">//! let claims = Claims::new(CustomClaims { subject: &quot;alice&quot;.to_owned() })</span>
+<span class="doccomment">//!     .set_duration_and_issuance(&amp;time_options, Duration::days(7))</span>
+<span class="doccomment">//!     .set_not_before(Utc::now() - Duration::hours(1));</span>
+<span class="doccomment">//! let token_string = Hs256.token(header, &amp;claims, &amp;key)?;</span>
+<span class="doccomment">//! println!(&quot;token: {}&quot;, token_string);</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // Parse the token.</span>
+<span class="doccomment">//! let token = UntrustedToken::new(&amp;token_string)?;</span>
+<span class="doccomment">//! // Before verifying the token, we might find the key which has signed the token</span>
+<span class="doccomment">//! // using the `Header.key_id` field.</span>
+<span class="doccomment">//! assert_eq!(token.header().key_id, Some(&quot;my-key&quot;.to_owned()));</span>
+<span class="doccomment">//! // Validate the token integrity.</span>
+<span class="doccomment">//! let token: Token&lt;CustomClaims&gt; = Hs256.validate_integrity(&amp;token, &amp;key)?;</span>
+<span class="doccomment">//! // Validate additional conditions.</span>
+<span class="doccomment">//! token.claims()</span>
+<span class="doccomment">//!     .validate_expiration(&amp;time_options)?</span>
+<span class="doccomment">//!     .validate_maturity(&amp;time_options)?;</span>
+<span class="doccomment">//! // Now, we can extract information from the token (e.g., its subject).</span>
+<span class="doccomment">//! let subject = &amp;token.claims().custom.subject;</span>
+<span class="doccomment">//! assert_eq!(subject, &quot;alice&quot;);</span>
+<span class="doccomment">//! # Ok(())</span>
+<span class="doccomment">//! # } // end main()</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Compact JWT</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! # use chrono::Duration;</span>
+<span class="doccomment">//! # use hex_buffer_serde::{Hex as _, HexForm};</span>
+<span class="doccomment">//! # use jwt_compact::{prelude::*, alg::{Hs256, Hs256Key}};</span>
+<span class="doccomment">//! # use serde::{Serialize, Deserialize};</span>
+<span class="doccomment">//! /// Custom claims encoded in the token.</span>
+<span class="doccomment">//! #[derive(Debug, PartialEq, Serialize, Deserialize)]</span>
+<span class="doccomment">//! struct CustomClaims {</span>
+<span class="doccomment">//!     /// `sub` is a standard claim which denotes claim subject:</span>
+<span class="doccomment">//!     ///     https://tools.ietf.org/html/rfc7519#section-4.1.2</span>
+<span class="doccomment">//!     /// The custom serializer we use allows to efficiently</span>
+<span class="doccomment">//!     /// encode the subject in CBOR.</span>
+<span class="doccomment">//!     #[serde(rename = &quot;sub&quot;, with = &quot;HexForm&quot;)]</span>
+<span class="doccomment">//!     subject: [u8; 32],</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # fn main() -&gt; anyhow::Result&lt;()&gt; {</span>
+<span class="doccomment">//! let time_options = TimeOptions::default();</span>
+<span class="doccomment">//! let key = Hs256Key::new(b&quot;super_secret_key_donut_steel&quot;);</span>
+<span class="doccomment">//! let claims = Claims::new(CustomClaims { subject: [111; 32] })</span>
+<span class="doccomment">//!     .set_duration_and_issuance(&amp;time_options, Duration::days(7));</span>
+<span class="doccomment">//! let token = Hs256.token(Header::default(), &amp;claims, &amp;key)?;</span>
+<span class="doccomment">//! println!(&quot;token: {}&quot;, token);</span>
+<span class="doccomment">//! let compact_token = Hs256.compact_token(Header::default(), &amp;claims, &amp;key)?;</span>
+<span class="doccomment">//! println!(&quot;compact token: {}&quot;, compact_token);</span>
+<span class="doccomment">//! // The compact token should be ~40 chars shorter.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // Parse the compact token.</span>
+<span class="doccomment">//! let token = UntrustedToken::new(&amp;compact_token)?;</span>
+<span class="doccomment">//! let token: Token&lt;CustomClaims&gt; = Hs256.validate_integrity(&amp;token, &amp;key)?;</span>
+<span class="doccomment">//! token.claims().validate_expiration(&amp;time_options)?;</span>
+<span class="doccomment">//! // Now, we can extract information from the token (e.g., its subject).</span>
+<span class="doccomment">//! assert_eq!(token.claims().custom.subject, [111; 32]);</span>
+<span class="doccomment">//! # Ok(())</span>
+<span class="doccomment">//! # } // end main()</span>
+<span class="doccomment">//! ```</span>
+
+<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
+<span class="comment">// Documentation settings.</span>
+<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
+<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://docs.rs/jwt-compact/0.4.0&quot;</span>)]</span>
+<span class="comment">// Linter settings.</span>
+<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">missing_docs</span>, <span class="ident">bare_trait_objects</span>)]</span>
+<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>, <span class="ident">clippy::pedantic</span>)]</span>
+<span class="attribute">#![<span class="ident">allow</span>(
+    <span class="ident">clippy::missing_errors_doc</span>,
+    <span class="ident">clippy::must_use_candidate</span>,
+    <span class="ident">clippy::module_name_repetitions</span>
+)]</span>
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">alg</span>;
+<span class="kw">mod</span> <span class="ident">claims</span>;
+<span class="kw">mod</span> <span class="ident">error</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">jwk</span>;
+<span class="kw">mod</span> <span class="ident">token</span>;
+<span class="kw">mod</span> <span class="ident">traits</span>;
+
+<span class="comment">// Polyfill for `alloc` types.</span>
+<span class="kw">mod</span> <span class="ident">alloc</span> {
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
+    <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">alloc</span>;
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">alloc</span>::{
+        <span class="ident">borrow</span>::{<span class="ident">Cow</span>, <span class="ident">ToOwned</span>},
+        <span class="ident">boxed::Box</span>,
+        <span class="ident">string</span>::{<span class="ident">String</span>, <span class="ident">ToString</span>},
+        <span class="ident">vec::Vec</span>,
+    };
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std</span>::{
+        <span class="ident">borrow</span>::{<span class="ident">Cow</span>, <span class="ident">ToOwned</span>},
+        <span class="ident">boxed::Box</span>,
+        <span class="ident">string</span>::{<span class="ident">String</span>, <span class="ident">ToString</span>},
+        <span class="ident">vec::Vec</span>,
+    };
+}
+
+<span class="doccomment">/// Prelude to neatly import all necessary stuff from the crate.</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prelude</span> {
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">AlgorithmExt</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">Claims</span>, <span class="ident">Header</span>, <span class="ident">TimeOptions</span>, <span class="ident">Token</span>, <span class="ident">UntrustedToken</span>};
+}
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">claims</span>::{<span class="ident">Claims</span>, <span class="ident">Empty</span>, <span class="ident">TimeOptions</span>},
+    <span class="ident">error</span>::{<span class="ident">Claim</span>, <span class="ident">CreationError</span>, <span class="ident">ParseError</span>, <span class="ident">ValidationError</span>},
+    <span class="ident">token</span>::{<span class="ident">Header</span>, <span class="ident">SignedToken</span>, <span class="ident">Token</span>, <span class="ident">UntrustedToken</span>},
+    <span class="ident">traits</span>::{<span class="ident">Algorithm</span>, <span class="ident">AlgorithmExt</span>, <span class="ident">AlgorithmSignature</span>, <span class="ident">Renamed</span>},
+};
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="jwt_compact" data-search-js="../../search-index.js"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>

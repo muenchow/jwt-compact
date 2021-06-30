@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Claims","Claims encoded in a token."],["Header","JWT header."],["TimeOptions","Time-related options for token creation and validation."],["Token","Token with validated integrity."],["UntrustedToken","Parsed, but unvalidated token."]],"trait":[["_","Automatically implemented extensions of the `Algorithm` trait."]]});
